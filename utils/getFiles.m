@@ -2,7 +2,7 @@ function names = getFiles(folder)
 
 names = {};
 
-allFiles = dir(['./',folder]);
+allFiles = dir(['.',filesep,folder]);
 
 namesIdx = 1;
 for kk = 1:length(allFiles)
