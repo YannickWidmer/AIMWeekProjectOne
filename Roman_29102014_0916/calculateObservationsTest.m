@@ -1,0 +1,79 @@
+clear all
+close all
+
+% define constants
+R = 0.461526  % [kJ/kg/K]
+T_c = 647.094 % [K]
+rho_c = 322.0  % [kg/m^3]
+p_c = 22.064  % [MPa]
+ro_c = 322    % kg/m^-3
+
+T = [222] % [K]   values of interest
+p = [34]  % [MPa] values of interest
+
+tau = T_c / T      % [0.6,2.4]
+delta =  p / p_c   % [0  ,3.5]
+
+domainTauBounds   = [0.6,2.4]
+domainDeltaBounds = [0  ,3.5]
+
+basisSize = 10
+domainSize = basisSize*10;% number of elements in domain
+
+domainTauDomain = linspace(domainTauBounds(1),domainTauBounds(2),domainSize)
+domainDeltaDomain = linspace(domainDeltaBounds(1),domainDeltaBounds(2),domainSize)
+
+noc = getCoeffNumber(basisSize)
+coeffIdx = getCoeffIndexes(basisSize)
+
+%% load data
+loadData
+
+%%
+
+coeffTauR = rand(noc,1)-0.5
+coeffDeltaR = rand(noc,1)-0.5
+
+coeffTauO = rand(noc,1)-0.5
+coeffDeltaO = rand(noc,1)-0.5
+
+% construct the surfaces for real and ideal part
+ar = alphaR(coeffTauR,coeffDeltaR,domainTauBounds,domainDeltaBounds,basisSize,coeffIdx)
+ao = alphaO(coeffTauR,coeffDeltaR,domainTauBounds,domainDeltaBounds,basisSize,coeffIdx)
+
+Tdir = 2 % tao direction
+Ddir = 1 % delta direction
+%
+% p/ro/R/T                 d_prhot
+1+delta*diff(ar,1,Ddir)
+
+% cv/R                     d_cv
+-tau.^2*(diff(ao,2,Tdir)+ diff(ar,2,Tdir))
+
+
+%figure,scatter(T_c./d_prhot(:,1),d_prhot(:,3)./p_c,'x'),xlabel('tau'),ylabel('delta'),xlim(domainTau),ylim(domainDelta)
+%figure,scatter(T_c./d_cv(:,1),linspace(domainDelta(1),domainDelta(2),383),'x'),xlabel('tau'),ylabel('delta'),xlim(domainTau),ylim(domainDelta)
+
+% evaluate surfaces
+arSurface = chebpolyval2(ar,domainSize,domainSize);
+aoSurface = chebpolyval2(ao,domainSize,domainSize);
+
+% plot surfaces from evalueted data
+figure,mesh(domainTauDomain,domainDeltaDomain,chebpolyval2(ar,domainSize,domainSize)),xlabel('tau'),ylabel('delta'),hold on,
+% get values at locations of interest in normalized coordinates e.g. [1.509],[2.086]
+plot3([1.509],[2.086],interp2(domainTauDomain,domainDeltaDomain,arSurface,[1.509],[2.086]),'xk')
+
+
+% preview some data
+figure,scatter3(T_c./d_prhot(:,1),d_prhot(:,2)./rho_c,d_prhot(:,3)./d_prhot(:,2)./R./d_prhot(:,1),'x'),xlabel('tau'),ylabel('delta')
+figure,scatter3(T_c./d_cv(:,1),d_cv(:,2)./rho_c,d_cv(:,3)./R,'x'),xlabel('tau'),ylabel('delta')
+
+
+% % cp/R
+% -tau.^2*(diff(ao,2,Tdir)+ diff(ar,2,Tdir)) + ...
+%     (1+delta*diff(ar,1,Ddir)-delta*tau*diff(diff(ar,1,Ddir),1,Tdir)).*(1+2*delta*diff(ar,1,Ddir)-delta.^2*diff(ar,2,Ddir)) ... 
+%    
+% % w
+% 1+2*delta*diff(ar,1,Ddir)+delta.^2*diff(ar,2,Ddir)+ (1+delta*diff(ar,1,Ddir)-delta*tau*diff(diff(ar,1,Ddir),1,Tdir)).^2 ./ ... 
+%     (tau.^2*(diff(ao,2,Tdir)+ diff(ar,2,Tdir)))
+

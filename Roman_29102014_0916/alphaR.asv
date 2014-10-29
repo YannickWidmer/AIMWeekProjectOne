@@ -1,0 +1,20 @@
+function [ cchebXY ] = alphaR(coeff,basisSize,tau,delta)
+
+idx()
+
+Cx = tril(rand(basisSize)-0.5)
+% Cx(4,4) = 0
+% Cx(3,3) = 1
+% Cx(2,2) = 0
+% Cx(1,1) = 0
+cchebX = chebfun({{[], Cx}})
+clf,plot(cchebX,'r',LW,lw)
+
+Cy = tril(rand(basisSize)-0.5)
+cchebY = chebfun({{[], Cy}})
+clf,plot(cchebY,'r',LW,lw)
+    
+cchebXY = cchebX*cchebY'
+
+end
+
