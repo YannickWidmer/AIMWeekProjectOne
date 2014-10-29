@@ -2,6 +2,7 @@ clear all
 %close all
 
 path(path,strcat( '.',filesep,'utils'));
+path(path,strcat( '.',filesep,'chebfun-master'));
 
 fileNames = getFiles(strcat('.',filesep,'data',filesep,'cp'))
 
