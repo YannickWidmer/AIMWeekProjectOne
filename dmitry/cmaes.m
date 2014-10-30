@@ -265,7 +265,7 @@ defopts.Science  = 'on  % off==do some additional (minor) problem capturing, NOT
 defopts.ReadSignals = 'on  % from file signals.par for termination, yet a stumb';
 defopts.Seed = 'sum(100*clock)  % evaluated if it is a string';
 defopts.DispFinal  = 'on   % display messages like initial and final message';
-defopts.DispModulo = '100  % [0:Inf], disp messages after every i-th iteration';
+defopts.DispModulo = '10  % [0:Inf], disp messages after every i-th iteration';
 defopts.SaveVariables = 'on   % [on|final|off][-v6] save variables to .mat file';
 defopts.SaveFilename = 'variablescmaes.mat  % save all variables, see SaveVariables'; 
 defopts.LogModulo = '1    % [0:Inf] if >1 record data less frequently after gen=100';
