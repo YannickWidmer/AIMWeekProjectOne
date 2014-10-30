@@ -14,7 +14,7 @@ if size(Coeffs,2) ~= 1
     else warning(' The Coeffs is multidimensional but it shouldnt be')
     end
 end
-
-error = chebpolyval(Coeffs,data_prepared(:,1))-data_prepared(:,2);
+f = chebfun(Coeffs,'coeffs');
+error = feval(f, data_prepared(:,1))-data_prepared(:,2);
 end
 

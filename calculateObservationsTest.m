@@ -17,8 +17,9 @@ p = [34]  % [MPa] values of interest
 Deltadir = 2 % delta direction
 Taudir = 1 % tao direction
 
-domainTauBounds   = [0.6,2.4]
-domainDeltaBounds = [0  ,3.5]
+domainTauBounds   = [0.5,3]
+domainDeltaBounds = [0  ,4]
+pressureTresholdForCp = 2 % Kg/m2
 
 %% load data
 % Here we load: d_cv, d_cp, p-rho-T, psigma, dl, dv, cpl, cpv ,w ,wT,
@@ -35,16 +36,18 @@ renorm_pressure = [T_c./d_prhot(:,1),d_prhot(:,2)./rho_c,d_prhot(:,3)./d_prhot(:
 % TODO renorm_cpl
 % TODO renorm_cpv
 renorm_w = [T_c./d_w(:,1),d_w(:,2)./rho_c,d_w(:,3).^2./(R_c*d_w(:,1))];
-renorm_wl = [T_c./d_wl(:,1),d_wl(:,2)./rho_c,d_wl(:,3).^2./(R_c*d_wl(:,1))];
-renorm_wv = [T_c./d_wv(:,1),d_wv(:,2)./rho_c,d_wv(:,3).^2./(R_c*d_wv(:,1))];
-
+%renorm_wl = [T_c./d_wl(:,1),d_wl(:,2)./rho_c,d_wl(:,3).^2./(R_c*d_wl(:,1))];
+%renorm_wv = [T_c./d_wv(:,1),d_wv(:,2)./rho_c,d_wv(:,3).^2./(R_c*d_wv(:,1))];
 %TODO dh jt dt
 
+% renorm of c_p for chebychev
+renorm_two_cp = [(renorm_cp(:,1)-mean(domainTauBounds))*2/(domainTauBounds(2)-domainTauBounds(1)),...
+    (renorm_cp(:,2)-mean(domainDeltaBounds))*2/(domainDeltaBounds(2)-domainDeltaBounds(1)),renorm_cp(:,3)]
+global renorm_cp_low_pressure
+renorm_cp_low_pressure = [renorm_two_cp(d_cp(:,2)<pressureTresholdForCp,[1,3])]
 
 
-
-
-figure,scatter3(renorm_cp(:,1),renorm_cp(:,2),renorm_cp(:,3))
+%figure,scatter3(renorm_two_cp(:,1),renorm_two_cp(:,2),renorm_cp(:,3))
 
 % preview some data
 %figure,scatter3(T_c./d_prhot(:,1),d_prhot(:,2)./rho_c,d_prhot(:,3)./d_prhot(:,2)./R./d_prhot(:,1),'x'),xlabel('tau'),ylabel('delta')
