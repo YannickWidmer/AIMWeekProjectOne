@@ -1,4 +1,4 @@
-function toterr = fitfun(v)
+function toterr = fitfun(v, renorm_cv, renorm_cp, renorm_pressure, renorm_w)
 toterr = 0;
 
 tempN = 6;
@@ -10,7 +10,6 @@ a0 = chebfun(Ca0, 'coeffs');
 C = reshape(v, tempN, densN);
 ar = chebfun2(C, 'coeffs');
 
-global renorm_cv renorm_cp renorm_pressure renorm_w
 % p-rho-T
 p_rhoRT = 1 + renorm_pressure(:, 2) .* feval(diffy(ar, 1), renorm_pressure(:,1), renorm_pressure(:, 2));
 toterr = toterr + sum( ((p_rhoRT - renorm_pressure(:,3)) ./ renorm_pressure(:,3)) .^2 );
