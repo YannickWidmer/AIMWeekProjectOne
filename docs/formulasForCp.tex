@@ -1,0 +1,65 @@
+%& --output-directory=.6/Output
+%\documentclass[a4paper,10pt,twocolumn]{article}
+\documentclass[a4paper,10pt]{article}
+
+\usepackage{color}
+\usepackage{../packages/style}
+\usepackage{../packages/math}
+\usepackage[utf8]{inputenc}
+\usepackage{fixltx2e,graphicx,mathpazo} %for unaryminus
+
+\newcommand{\defSet}[2]{\{ \; #1\; :\; #2\;\}}
+
+ \title{Overview}
+ \author{Yannick Widmer}
+ \date{\today}
+ 
+ \pdfinfo{%
+   /Title    (Overview)
+   /Author   (Yannick Widmer)
+   /Creator  (Yannick Widmer)
+   /Producer (Yannick Widmer)
+   /Subject  (Integrable systems,sinh-Gordon,Birkhoffcoordinates)
+   /Keywords (Integrable systems,sinh-Gordon,Birkhoffcoordinates)
+ }
+
+
+
+
+\begin{document}
+\maketitle
+\section{First}
+The ideal gas Helmholtz free energy as a function of $c_p$
+\[
+	a(\rho,T)=\int_{T_0}^T c_p\mathrm{d}s - RT- T\int_{T_0}^T \frac{c_p}{s} \mathrm{d}s + R\log(T)+TR\log(\rho/\rho_0)
+\]
+
+hence $\alpha$ as a function of $\delta$  and $\tau$, without keeping track of the constants,is
+\begin{align*}
+\alpha(\delta,\tau) &= \frac{a(\delta,\tau)}{RT}
+\\&=\tau\int_\tau^{\tau_{end}} \frac{c_p'}{s^2}\mathrm{d}s -\int_\tau^{\tau_{end}} \frac{c_p' }{s} \mathrm{d}s
+\frac{\tau (\log(\tau)-\log(T_c))}{T_c}+\log(\delta)
+\\&=-\int_\tau^{\tau_{end}} c_p'\frac{\tau-s}{ s^2}\mathrm{d}s-\frac{\tau (\log(\tau)-\log(T_c))}{T_c}+\log(\delta)
+\end{align*}
+where $c_p'=c_p/R$. It follows that the derivatives are
+\begin{align}
+\alpha_\delta &= \frac{1}{\delta}
+\\ \alpha_{\delta\delta} &= -\frac1{\delta^2}
+\\ \alpha_\tau &=-\int_\tau^{\tau_{end}} {c_p'}_\tau \frac{\tau-s}{s^2}+c_p' \frac{1}{s^2}\mathrm{d}s
+-\frac{\log(\tau)-\log(T_c)+1}{T_c}
+\\ \alpha_{\tau\tau} &= -\int_\tau^{\tau_{end}}{c_p'}_{\tau\tau}\frac{\tau-s}{s^2} +
+{c_p'}_\tau\frac{2}{s^2} - \frac{1}{\tau T_c}
+\end{align}
+
+which in the renormalized variables are
+\begin{align}
+\alpha_{\delta'} &= \frac{\delta_{diff}}{\delta' \delta_{diff}+\delta_{mean}}
+\\ \alpha_{\delta'\delta'} &= -\frac{\delta_{diff}^2}{(\delta'\delta_{diff}\delta_{mean})^2}
+\\ \alpha_{\tau'} &=-\int_{\tau'}^{1} \frac{{c_p'}_{\tau'}\tau_{diff}(\tau'-s)+c_p'}{(s\tau_{diff}+\tau_{mean})^2}\mathrm{d}s
+-\frac{\log(\tau'\tau_{diff}+\tau_{mean})-\log(T_c)+1}{T_c}
+\\ \alpha_{\tau'\tau'} &= -\int_{\tau'}^{1} \frac{{c_p'}_{\tau'\tau'}\tau_{diff}^2(\tau'-s)+{c_p'}_{\tau'}2\tau_{diff}}{(s\tau_{diff}+\tau_{mean})^2}\mathrm{d}s
++\frac{c_p'}{\tau\tau_{diff}+\tau_{mean}}
+\\&\indent-\frac{\tau_{diff}}{(\tau'\tau_{diff}+\tau_{mean})T_c}
+\end{align}
+
+\end{document}
