@@ -17,7 +17,7 @@ p = [34]  % [MPa] values of interest
 Deltadir = 2 % delta direction
 Taudir = 1 % tao direction
 
-domainTauBounds   = [0.5,3]
+domainTauBounds   = [0.0,3.5]
 domainDeltaBounds = [0  ,4]
 pressureTresholdForCp = 2 % Kg/m2
 
@@ -25,9 +25,12 @@ pressureTresholdForCp = 2 % Kg/m2
 % Here we load: d_cv, d_cp, p-rho-T, psigma, dl, dv, cpl, cpv ,w ,wT,
 % wv,dh,jt,dt
 loadData
+load('/home/b/ywidme/Documents/Workstation/AIM/AIMWeekProjectOne/data/d_cpoverr_cooper.mat')
+
 %% Renomralize
 % we renormalize all the data to delta and tau
 renorm_cv = [T_c./d_cv(:,1),d_cv(:,2)./rho_c,d_cv(:,3)./R_c];
+renorm_cp_low_pres = [T_c./d_cpoverr_cooper(:,1),d_cpoverr_cooper(:,2)];
 renorm_cp = [T_c./d_cp(:,1),d_cp(:,2)./rho_c,d_cp(:,3)./R_c];
 renorm_pressure = [T_c./d_prhot(:,1),d_prhot(:,2)./rho_c,d_prhot(:,3)./d_prhot(:,2)./R_c./d_prhot(:,1)];
 % TODO renorm_psigma
@@ -42,10 +45,12 @@ renorm_w = [T_c./d_w(:,1),d_w(:,2)./rho_c,d_w(:,3).^2./(R_c*d_w(:,1))];
 
 % renorm of c_p for chebychev
 renorm_two_cp = [(renorm_cp(:,1)-mean(domainTauBounds))*2/(domainTauBounds(2)-domainTauBounds(1)),...
-    (renorm_cp(:,2)-mean(domainDeltaBounds))*2/(domainDeltaBounds(2)-domainDeltaBounds(1)),renorm_cp(:,3)]
-global renorm_cp_low_pressure
-renorm_cp_low_pressure = [renorm_two_cp(d_cp(:,2)<pressureTresholdForCp,[1,3])]
+    (renorm_cp(:,2)-mean(domainDeltaBounds))*2/(domainDeltaBounds(2)-domainDeltaBounds(1)),renorm_cp(:,3)];
 
+renorm_cp_low_pres = [(renorm_cp_low_pres(:,1)-mean(domainTauBounds))*2/(domainTauBounds(2)-domainTauBounds(1)),...
+    renorm_cp_low_pres(:,2)];
+global renorm_cp_low_pressure
+renorm_cp_low_pressure = renorm_cp_low_pres(renorm_cp_low_pres(:,1)<1,[1,2]);
 
 %figure,scatter3(renorm_two_cp(:,1),renorm_two_cp(:,2),renorm_cp(:,3))
 

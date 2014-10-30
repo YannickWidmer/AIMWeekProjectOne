@@ -277,7 +277,7 @@ defopts.LogPlot = 'off    % plot while running using output data files';
 %defopts.varopt1 = ''; % 'for temporary and hacking purposes'; 
 %defopts.varopt2 = ''; % 'for temporary and hacking purposes'; 
 defopts.UserData = 'for saving data/comments associated with the run';
-defopts.UserDat2 = ''; 'for saving data/comments associated with the run';
+defopts.UserDat2 = 'plottingFunction'; 'for saving data/comments associated with the run';
 
 % ---------------------- Handling Input Parameters ----------------------
 
@@ -1479,6 +1479,14 @@ while isempty(stopflag)
     out.solutions.bestever.f = fitness.hist(1);
     out.solutions.bestever.evals = counteval + fitness.idx(1) - lambda;
     bestever = out.solutions.bestever;
+    
+    if(mod(counteval,200))
+        try
+            surfPlottingFunction(bestever);
+        catch
+            warning('no plotting this time in cmaes')
+        end
+    end   
   end
 
   % Set stop flag

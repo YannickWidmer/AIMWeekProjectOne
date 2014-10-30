@@ -2,8 +2,8 @@
 global renorm_cp
 
 fitfun = 'vector_d_cv_fit';
-xstart = zeros(10,1);
-insigma = 0.3*ones(10,1);
+xstart = zeros(7,1);
+insigma = 0.3*ones(7,1);
 
 [xmin, fmin, counteval, stopflag, out, bestever] = cmaes( ...
     fitfun, xstart, insigma);
